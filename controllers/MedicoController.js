@@ -1,6 +1,6 @@
 const Medico = require('../models/Medico');
 const RetornoQuery = require('../models/RetornoQuery');
-
+const mysql = require('mysql');
 const db = require('../config/database');
 const tableName = "medico";
 
@@ -102,7 +102,15 @@ exports.findById = function (req, res) {
 
 //GET
 exports.findAll = function (req, res) {
-    db.query(`SELECT * FROM ${tableName}`, function(error, results, fields){
+    var pool  = mysql.createPool({
+        connectionLimit : 10,
+        host     : 'us-cdbr-east-02.cleardb.com',
+        user     : 'b9620031cd6bcd',
+        password : '6b2de1bc',
+        database : 'heroku_7b77483e48212ed'
+    });
+
+    pool.query(`SELECT * FROM ${tableName}`, function (error, results, fields) {
         if(error)
             res.json(error);
         else
